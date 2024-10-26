@@ -1,0 +1,17 @@
+main {
+  display: flex;
+}
+
+.form {
+  width: 30%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+}
