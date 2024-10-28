@@ -1,19 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import styles from "./RequireAuth.module.css"; // Import your CSS module
 
 const RequireAuth = ({ children }) => {
-  const isAuthenticated = localStorage.getItem("adminName");
+  const isAuthenticated = localStorage.getItem("userEmail");
 
   if (!isAuthenticated) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-200">
-        <div className="bg-white p-8 rounded-lg shadow-lg text-center">
-          <h1 className="text-3xl font-bold">404 Not Found</h1>
-          <p className="text-gray-600 text-lg mb-4">
-            You need to login to see this page.
+      <div className={styles.container}>
+        <div className={styles.content}>
+          <h1 className={styles.title}>Access Denied</h1>
+          <p className={styles.message}>
+            You need to log in to access this page. Please log in to continue.
           </p>
-          <Link to="/" className="text-blue-500">
-            Go back to login
+          <Link to="/login" className={styles.link}>
+            Go to Login
           </Link>
         </div>
       </div>

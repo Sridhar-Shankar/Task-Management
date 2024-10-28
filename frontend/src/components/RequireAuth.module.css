@@ -1,0 +1,34 @@
+/* RequireAuth.module.css */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #e5e7eb; /* Tailwind gray-200 */
+  }
+  
+  .card {
+    background-color: white;
+    padding: 2rem; /* Equivalent to p-8 */
+    border-radius: 0.5rem; /* Equivalent to rounded-lg */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Equivalent to shadow-lg */
+    text-align: center;
+  }
+  
+  .header {
+    font-size: 1.875rem; /* Equivalent to text-3xl */
+    font-weight: 700; /* Equivalent to font-bold */
+  }
+  
+  .message {
+    color: #4b5563; /* Tailwind gray-600 */
+    font-size: 1.125rem; /* Equivalent to text-lg */
+    margin-bottom: 1rem; /* Equivalent to mb-4 */
+  }
+  
+  .link {
+    color: #3b82f6; /* Tailwind blue-500 */
+    text-decoration: none;
+  }
+  
