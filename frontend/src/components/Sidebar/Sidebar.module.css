@@ -5,9 +5,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  
-  .leftcontainer div {
+}
+
+.leftcontainer div {
     display: flex;
     align-items: center;
     width: 100%;
@@ -15,33 +15,37 @@
     margin: 4px 0; 
     cursor: pointer;
     color: gray;
-  }
-  
-  .leftcontainer div:hover {
+}
+
+.leftcontainer div:hover {
     background-color: #4391ed1a;
-  }
-  
-  .leftcontainer div img {
+}
+
+.leftcontainer div img {
     margin-left: 20%; 
-  }
-  
-  .leftcontainer .logo {
+    margin-right: 8px; 
+}
+
+.leftcontainer .logo {
     color: black;
     margin-bottom: 16px; 
-  }
-  
-  .leftcontainer .logout {
+}
+
+.leftcontainer .logout {
     margin-top: auto;
-  }
-  
-  .leftcontainer h1,
-  .leftcontainer h2 {
+}
+
+.leftcontainer h1,
+.leftcontainer h2 {
     font-size: 16px; 
-    margin-left: 8px;
-  }
-  
-  .selectedtype {
+    margin: 0; 
+}
+
+.leftcontainer h1 {
+    margin-left: 0; 
+}
+
+.selectedtype {
     background-color: #4391ed1a !important;
     color: black !important;
-  }
-  
+}
