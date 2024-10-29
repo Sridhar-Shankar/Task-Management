@@ -1,0 +1,10 @@
+.maincontainer {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+}
+
+.rightcontainer {
+    width: 84%;
+    height: 100vh;
+}

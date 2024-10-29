@@ -2,7 +2,6 @@ const Profile = require("../models/Profile");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-// Register a profile
 const register = async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -27,7 +26,6 @@ const register = async (req, res) => {
     }
 };
 
-// Login a profile
 const login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -49,18 +47,20 @@ const login = async (req, res) => {
     }
 };
 
-// Get all profiles
-const getAllProfiles = async (req, res) => {
+const getProfile = async (req, res) => {
     try {
-        const profiles = await Profile.find().select('-password'); // Exclude passwords
-        res.status(200).json({ profiles });
+        const profile = await Profile.findById(req.user.id).select("-password"); // Exclude password
+        if (!profile) {
+            return res.status(404).json({ message: "Profile not found" });
+        }
+        res.status(200).json({ profile });
     } catch (error) {
-        res.status(500).json({ message: "Internal server error", error });
+        res.status(500).json({ message: "Error fetching profile", error });
     }
 };
 
 module.exports = {
     register,
     login,
-    getAllProfiles,
+    getProfile,
 };

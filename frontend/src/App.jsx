@@ -3,7 +3,10 @@ import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import RequireAuth from "./components/RequireAuth";
-import Dashboard from "./components/Dashboard/dashboard";
+import Home from "./components/Home/Home";
+import Dashboard from "./components/Dashboard/Dashboard";
+import Analytics from "./components/Analytics/Analytics";
+import Settings from "./components/Settings/Settings";
 
 function App() {
   return (
@@ -11,11 +14,14 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/settings" element={<Settings />} />
         <Route
-          path="/dashboard"
+          path="/home"
           element={
             <RequireAuth>
-              <Dashboard />
+              <Home />
             </RequireAuth>
           }
         />

@@ -43,10 +43,13 @@ const Login = () => {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post("http://localhost:8000/auth/login", formData);
+      const response = await axios.post(
+        "http://localhost:8000/auth/login",
+        formData
+      );
       localStorage.setItem("userEmail", JSON.stringify(response.data));
       toast.success(response.data.message);
-      setTimeout(() => navigate("/dashboard"), 1500);
+      setTimeout(() => navigate("/home"), 1500);
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
     }
@@ -78,15 +81,26 @@ const Login = () => {
               onChange={handleChange}
             />
             <span className={styles.eye}>
-              <Eye inputType={inputType} toggleEye={() => setInputType(inputType === "password" ? "text" : "password")} />
+              <Eye
+                inputType={inputType}
+                toggleEye={() =>
+                  setInputType(inputType === "password" ? "text" : "password")
+                }
+              />
             </span>
           </div>
-          {errors.password && <span className={styles.error}>{errors.password}</span>}
+          {errors.password && (
+            <span className={styles.error}>{errors.password}</span>
+          )}
         </div>
-        <button className={styles.login} type="submit">Log in</button>
+        <button className={styles.login} type="submit">
+          Log in
+        </button>
         <p>No account?</p>
         <Link to="/register">
-          <button type="button" className={styles.register}>Register</button>
+          <button type="button" className={styles.register}>
+            Register
+          </button>
         </Link>
       </form>
     </main>
