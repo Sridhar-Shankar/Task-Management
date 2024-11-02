@@ -28,7 +28,7 @@ const Readonlychecklist = () => {
         .catch(err => {
             console.log(err); // Logging errors, if any
         });
-    }, []); // Empty dependency array to run effect only once on mount
+    }, [url]); // Empty dependency array to run effect only once on mount
 
     return (singlechecklist != null) ? ( // Conditional rendering based on checklist data availability
         <>

@@ -129,21 +129,21 @@ const Createcard = ({
             Select Priority <span>*</span>
           </p>
           <button
-            className={priority == "high" && styles.selectedbtn}
+            className={priority === "high" && styles.selectedbtn}
             onClick={() => handlepriority("high")}
           >
             <img src={Ellipseimg} alt="" />
             <p>HIGH PRIORITY</p>
           </button>
           <button
-            className={priority == "moderate" && styles.selectedbtn}
+            className={priority === "moderate" && styles.selectedbtn}
             onClick={() => handlepriority("moderate")}
           >
             <img src={Ellipse2img} alt="" />
             <p>MODERATE PRIORITY</p>
           </button>
           <button
-            className={priority == "low" && styles.selectedbtn}
+            className={priority === "low" && styles.selectedbtn}
             onClick={() => handlepriority("low")}
           >
             <img src={Ellipse3img} alt="" />
