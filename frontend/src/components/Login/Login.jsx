@@ -1,110 +1,175 @@
-import React, { useState } from "react";
-import styles from "./Login.module.css";
-import Banner from "../../UI/Banner";
-import { Link, useNavigate } from "react-router-dom";
-import Eye from "../../UI/Eye/Eye";
+// Necessary imports from React and other dependencies
+import React, { useState } from 'react';
+import styles from "./Login.module.css"; // CSS module for styling
+// Importing image assets for the form
+import Loginimg from "../../assets/Loginimg.png";
+import emailimg from "../../assets/emailimg.png";
+import passwordimg from "../../assets/passwordimg.png";
+import eyeimg from "../../assets/eyeimg.png"; // Icon for toggling password visibility
+import nameimg from "../../assets/nameimg.png"; // Icon for the name input field (used in signup)
+// Utility function for form validation
+import { checkvalidatedata } from '../../utils/Validate';
+// Base URL for making API requests
+import { commonapiurl } from '../../Config';
+// Hooks for navigation and dispatching Redux actions
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import { useDispatch } from 'react-redux';
+// Redux action for adding user data to the store
+import { adduser } from '../../Store/Userslice';
 
-const Login = () => {
-  const navigate = useNavigate();
-  const [inputType, setInputType] = useState("password");
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState({ email: "", password: "" });
+const LoginSignup = () => {
+  // State hooks for managing component state
+  const[signup, setsignup] = useState(true); // Determines whether the form is in signup or login mode
+  const[error, seterror] = useState(""); // For displaying form validation or request errors
+  const[passwordtype, setpasswordtype] = useState("password"); // Controls password input field type for visibility
+  const[confirmpasstype, setconfirmpasstype] = useState("password"); // Same as above, for confirm password field
+  const[errorflag, seterrorflag] = useState(true); // Flag to control form submission feedback
+  // Form input states
+  const[name, setname] = useState("");
+  const[email, setemail] = useState("");
+  const[password, setpassword] = useState("");
+  const[confirmpass, setconfirmpass] = useState("");
+  // Hooks for navigation and dispatch
+  const dispatch = useDispatch();
+  const history = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" }); // Clear errors on change
-  };
+  // Function to toggle between login and signup form
+  function handleclick(e){
+    e.preventDefault(); // Prevent form submission
+    seterror(""); // Clear any existing errors
+    setsignup(!signup); // Toggle form mode
+  }
 
-  const validateForm = () => {
-    let isValid = true;
-    const newErrors = { email: "", password: "" };
+  // Function to handle form submission for both login and signup
+  function handleloginsignup(e){
+    e.preventDefault(); // Prevent form submission
+    let temperror = checkvalidatedata({name, email, password, confirmpass}, signup); // Validate form data
+    seterror(temperror); // Set any validation errors
+    if(temperror !== "") return; // If there are errors, do not proceed
+    seterrorflag(false); // Indicate form is processing
 
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
-      isValid = false;
+    // Conditional logic for handling signup or login
+    if(signup){
+      // POST request to register endpoint
+      axios.post(`${commonapiurl}auth/register`, {name, email, password})
+      .then((response) => {
+        // Handle successful registration
+        if(response.data.jwttoken){
+          const { jwttoken, user: { _id: userid, name } } = response.data;
+          dispatch(adduser({jwttoken, userid, name})); // Dispatch action to add user data to Redux store
+          history("/board"); // Navigate to the dashboard
+        }else{
+          seterror("Email already in use"); // Handle registration error
+          seterrorflag(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error); // Log any request errors
+      });
+    }else{
+      // POST request to login endpoint
+      axios.post(`${commonapiurl}auth/login`, {email, password})
+      .then((response) => {
+        // Handle successful login
+        if(response.data.jwttoken){
+          const { jwttoken, user: { _id: userid, name } } = response.data;
+          dispatch(adduser({jwttoken, userid, name})); // Dispatch action to add user data to Redux store
+          history("/board"); // Navigate to the dashboard
+        }else{
+          seterror("Wrong Email or password"); // Handle login error
+          seterrorflag(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error); // Log any request errors
+      });
     }
+  }
 
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-      isValid = false;
-    }
+  // Functions to toggle password and confirm password visibility
+  function handlepasswordtype(){
+    setpasswordtype(passwordtype === "password" ? "text" : "password");
+  }
+  function handleconfirmpasstype(){
+    setconfirmpasstype(confirmpasstype === "password" ? "text" : "password");  
+  }
 
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/auth/login",
-        formData
-      );
-      localStorage.setItem("userEmail", JSON.stringify(response.data));
-      toast.success(response.data.message);
-      setTimeout(() => navigate("/home"), 1500);
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Login failed");
-    }
-  };
-
+  // JSX for rendering the login/signup form
   return (
-    <main>
-      <Toaster />
-      <Banner />
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <h1 className={styles.header}>Login</h1>
-        <div className={styles.inputGroup}>
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            className={styles.email}
-            value={formData.email}
-            onChange={handleChange}
-          />
-          {errors.email && <span className={styles.error}>{errors.email}</span>}
-          <div className={styles.inputPwdGroup}>
-            <input
-              type={inputType}
-              name="password"
-              placeholder="Password"
-              className={styles.password}
-              value={formData.password}
-              onChange={handleChange}
-            />
-            <span className={styles.eye}>
-              <Eye
-                inputType={inputType}
-                toggleEye={() =>
-                  setInputType(inputType === "password" ? "text" : "password")
-                }
+    // Main container for the form
+    <div className={styles.maincontainer}>
+      {/* Left container with welcome message and graphic */}
+      <div className={styles.leftcontainer}>
+        <img src={Loginimg} alt="" />
+        <h2>Welcome aboard my friend</h2>
+        <h3>just a couple of clicks and we start</h3>
+      </div>
+      {/* Right container with form inputs and buttons */}
+      <div className={styles.rightcontainer}>
+        <form>
+          <h3>{signup ? "Register" : "Login"}</h3>
+          {/* Conditional rendering for name input field in signup mode */}
+          {signup && (
+            <div>
+              <input type="text" name='text'
+              placeholder='Name'
+              onChange={(e)=>setname(e.target.value)}
+              value={name}
               />
-            </span>
-          </div>
-          {errors.password && (
-            <span className={styles.error}>{errors.password}</span>
+              <img src={nameimg} alt="" />
+            </div>
           )}
-        </div>
-        <button className={styles.login} type="submit">
-          Log in
-        </button>
-        <p>No account?</p>
-        <Link to="/register">
-          <button type="button" className={styles.register}>
-            Register
-          </button>
-        </Link>
-      </form>
-    </main>
-  );
-};
+          {/* Email input field */}
+          <div>
+            <input type="email" name='email'
+            placeholder='Email'
+            onChange={(e)=>setemail(e.target.value)}
+            value={email}
+            />
+            <img src={emailimg} alt="" />
+          </div>
+          {/* Conditional rendering for confirm password input field in signup mode */}
+          {signup && (
+            <div>
+              <input type={confirmpasstype} name='password'
+              placeholder="Confirm Password"
+              onChange={(e)=>setconfirmpass(e.target.value)}
+              value={confirmpass}
+              />
+              <img src={passwordimg} alt="" />
+              <div onClick={handleconfirmpasstype}>
+                <img src={eyeimg} alt="" />
+              </div>
+            </div>
+          )}
+          {/* Password input field */}
+          <div>
+            <input type={passwordtype} name='password'
+            placeholder="Password"
+            onChange={(e)=>setpassword(e.target.value)}
+            value={password}
+            />
+            <img src={passwordimg} alt="" />
+            <div onClick={handlepasswordtype}>
+              <img src={eyeimg} alt="" />
+            </div>
+          </div>
+          {/* Display any form errors */}
+          <h4>{error}</h4>
+          {/* Submit button for form */}
+          {signup ? (
+            <button onClick={(e) => handleloginsignup(e)}>{errorflag ? "Register" : "Loading..."}</button>
+          ) : (
+            <button onClick={(e) => handleloginsignup(e)}>{errorflag ? "Log in" : "Loading..."}</button>
+          )}
+          {/* Toggle between login and signup forms */}
+          <p>{signup ? "Have an account?" : "Have no account yet?"}</p>
+          <button onClick={(e) => handleclick(e)}>{signup ? "Login" : "Register"}</button>
+        </form>
+      </div>
+    </div>
+  )
+}
 
-export default Login;
+export default LoginSignup;

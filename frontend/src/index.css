@@ -1,17 +1,39 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Single+Day&display=swap");
-
-* {
-  font-family: "Roboto";
-  box-sizing: border-box;
-}
-
 body {
   margin: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh;
+  box-sizing: border-box;
+  font-size: 20px;
+  font-family: Poppins;
+  font-size: 1rem;
 }
-.homepage {
-  width: 100%;
-  display: flex;
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+       -webkit-appearance: none;
+        margin: 0;
 }
+
+::-webkit-scrollbar {
+    width: 0px;
+  }
+  
+  @media (min-width:40em){
+    ::-webkit-scrollbar {
+      width: 10px;
+    }  
+  }
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
